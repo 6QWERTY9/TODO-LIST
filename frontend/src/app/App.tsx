@@ -1,10 +1,10 @@
-
+import { Header } from "@shared/components/header"
 
 function App() {
 
   return (
     <>
-      sdfs
+      <Header/>
       
     </>
   )
