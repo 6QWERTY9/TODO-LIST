@@ -1,0 +1,31 @@
+@use '../../../../../../shared/styles/vars' as *;
+@use '../../../../../../shared/styles/mixins' as *;
+
+.sidebar_item {
+
+    width: 288px;
+    height: 59px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding-left: 5px;
+
+    user-select: none;
+    cursor: pointer;
+    
+    & > div > div > svg > path {
+        fill: $white;
+    }
+
+    &.select {
+        background: $white;
+        color: $peach;
+        & > div > div > svg > path {
+            fill: $peach;
+        }
+    }
+}
