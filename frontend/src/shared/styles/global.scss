@@ -1,0 +1,23 @@
+@use './vars' as *;
+
+html,
+body,
+#root {
+    
+    position: relative;
+}
+
+body {
+    font-family: $defaultFont;
+    
+}
+
+*,
+:after,
+:before {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}

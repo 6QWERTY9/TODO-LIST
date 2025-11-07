@@ -1,0 +1,10 @@
+@use './vars' as *;
+
+
+@mixin textStyle($fontSize: $fontSize16, $color: $black, $fontWeight: $fontWeightRegular) {
+    font-family: $defaultFont;
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+
+    color: $color;
+}
