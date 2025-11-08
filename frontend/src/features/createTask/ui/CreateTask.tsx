@@ -1,0 +1,138 @@
+import { useFormik } from "formik"
+import { validationSchema } from "../model"
+import type { CreateTaskFormProps, CreateTaskProps } from "../model"
+
+import css from './index.module.scss';
+import { useState } from "react";
+
+export const CreateTask: React.FC<CreateTaskProps> = ({open}) => {
+  const [isOpen, setIsOpen] = useState(open);
+
+  const handleClose = () => {
+    setIsOpen(false)
+  }
+  return (
+    <dialog open={isOpen} className={css.create_task_wrapper}>
+      <div className={css.create_task_content}>
+        <div className={css.create_task_top_content}>
+          <span className={css.create_task_title}>Создать новую задачу</span>
+          <button onClick={handleClose} className={css.create_task_close_btn}>Закрыть</button>
+        </div>
+        <CreateTaskForm/>
+      </div>
+    </dialog>
+  )
+}
+
+
+const CreateTaskForm: React.FC = () => {
+  const formik = useFormik<CreateTaskFormProps>({
+    initialValues: {
+      title: '',
+      shortDesc: '',
+      isExtreme: false,
+      isModerate: false,
+      isLow: false,
+      description: '',
+      date: ''
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log('Formik данные для сохранения:');
+      try {
+
+        const jsonData = JSON.stringify(values);
+
+        localStorage.setItem('taskData', jsonData);
+        
+        console.log('Данные успешно сохранены в localStorage:', values);
+        alert('Задача сохранена в локальное хранилище браузера.');
+        formik.resetForm(); 
+      } catch (error) {
+        console.error('Ошибка при сохранении в localStorage:', error);
+        alert('Не удалось сохранить данные (возможно, переполнено хранилище)');
+      }
+    }
+  })
+  return (
+    <form action="" method="post" onSubmit={formik.handleSubmit} className={css.create_task_form}>
+      <fieldset className={css.form_wrapper}>
+        <div  className={css.input_conteiner}>
+          <label htmlFor="title" className={css.input_wrapper}>
+            <span>Названия</span>
+            <input type="text" id="title" {...formik.getFieldProps('title')}/>
+          </label>
+          {/* Отображаем ошибку, если поле было тронуто (touched) и есть ошибка */
+            formik.errors.title ? (
+            <div className={css.error}>{formik.errors.title}</div>
+          ) : null}
+        </div>
+
+        <div className={css.input_conteiner}>
+          <label htmlFor="shortDesc" className={css.input_wrapper}>
+            <span>Краткое описания</span>
+            <input type="text" id="shortDesc" {...formik.getFieldProps('shortDesc')}/>
+          </label>
+          {formik.errors.shortDesc ? (
+            <div className={css.error}>{formik.errors.shortDesc}</div>
+          ) : null}
+        </div >
+
+        <div className={css.input_conteiner}>
+          <label htmlFor="date" className={css.input_wrapper} >
+            <span>Дата</span>
+            <input type="date" id="date" {...formik.getFieldProps('date')}/>
+          </label>
+          { formik.errors.date ? (
+            <div className={css.error}>{formik.errors.date}</div>
+          ) : null}
+        </div>
+        
+        <fieldset className={css.checkbox_wrapper}>
+          <span>Приоритет: </span>
+          <div>
+            <label htmlFor="isExtreme">
+              <span>Срочный: </span>
+              <input 
+                type="checkbox" 
+                id="isExtreme"
+                {...formik.getFieldProps('isExtreme')}
+                checked={formik.values.isExtreme}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="isModerate">
+              <span>Умренный: </span>
+              <input 
+                type="checkbox"
+                id="isModerate"
+                {...formik.getFieldProps('isModerate')}
+                checked={formik.values.isModerate}
+                />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="isLow">
+              <span>Низкий: </span>
+              <input 
+                type="checkbox" 
+                id="isLow"
+                {...formik.getFieldProps('isLow')}
+                checked={formik.values.isLow}
+              />
+            </label>
+          </div>
+          
+        </fieldset>
+        <div className={css.description_wrapper}>
+          <span>Описания задачи</span>
+          <label htmlFor="description">
+            <textarea id="description" rows={10} cols={86} {...formik.getFieldProps('description')}/>
+          </label>
+        </div>
+        <button type="submit" disabled={!formik.isValid || formik.isSubmitting}>Создать задачу</button>
+      </fieldset>
+    </form>
+  )
+}

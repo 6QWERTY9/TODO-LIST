@@ -1,4 +1,7 @@
-import { TaskCard } from "@entities/TaskCard"
+
+import { CreateTask } from "@features/createTask"
+
+
 import { Header } from "@shared/components/header"
 
 import { BrowserRouter } from "react-router-dom"
@@ -9,14 +12,7 @@ function App() {
       <Header/>
       
 
-      <TaskCard 
-        title="Submit Documents"
-        shortDesc='Make sure to submit all the necessary docum.....'
-        id="title"
-        status='Выполнено'
-        priority="Срочный"
-        createDate="08/11/2025"
-      />
+      <CreateTask open={true}/>
     </BrowserRouter>
   )
 }
