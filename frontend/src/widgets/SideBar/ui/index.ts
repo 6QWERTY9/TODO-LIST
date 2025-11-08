@@ -1,3 +1,3 @@
-import SideBar from './SideBar.tsx'
+import {SideBar} from './SideBar.tsx'
 
 export { SideBar }

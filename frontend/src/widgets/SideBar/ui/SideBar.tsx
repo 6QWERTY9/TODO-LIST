@@ -6,7 +6,7 @@ import css from './index.module.scss';
 const sideBarNavItems = [
   {id: 'my_task', title: 'Список задач', icon: './icons/task.svg', route: '/'}
 ]
-export const SideBarNav = () => {
+export const SideBar = () => {
   const [activeItemId, setActiveItemId] = useState<string | null>('my_task');
 
   const handleItemClick = (id: string) => {
