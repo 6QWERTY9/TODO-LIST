@@ -128,11 +128,11 @@ const CreateTaskForm: React.FC = () => {
         <div className={css.description_wrapper}>
           <span>Описания задачи</span>
           <label htmlFor="description">
-            <textarea id="description" rows={10} cols={86} {...formik.getFieldProps('description')}/>
+            <textarea id="description" rows={8} cols={86} {...formik.getFieldProps('description')}/>
           </label>
         </div>
-        <button type="submit" disabled={!formik.isValid || formik.isSubmitting}>Создать задачу</button>
       </fieldset>
+        <button type="submit" disabled={!formik.isValid || formik.isSubmitting}>Создать задачу</button>
     </form>
   )
 }
