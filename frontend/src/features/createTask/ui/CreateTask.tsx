@@ -1,22 +1,20 @@
 import { useFormik } from "formik"
 import { validationSchema } from "../model"
-import type { CreateTaskFormProps, CreateTaskProps } from "../model"
+import type { CreateTaskProps, TaskData } from "../model"
 
 import css from './index.module.scss';
-import { useState } from "react";
 
-export const CreateTask: React.FC<CreateTaskProps> = ({open}) => {
-  const [isOpen, setIsOpen] = useState(open);
+import { getAllSavedTask, saveAllTasks } from "@shared/util/localStorageUtils";
 
-  const handleClose = () => {
-    setIsOpen(false)
-  }
+
+export const CreateTask: React.FC<CreateTaskProps> = ({open, onClose}) => {
+  
   return (
-    <dialog open={isOpen} className={css.create_task_wrapper}>
+    <dialog open={open} aria-modal={true} className={css.create_task_wrapper}>
       <div className={css.create_task_content}>
         <div className={css.create_task_top_content}>
           <span className={css.create_task_title}>Создать новую задачу</span>
-          <button onClick={handleClose} className={css.create_task_close_btn}>Закрыть</button>
+          <button onClick={onClose} className={css.create_task_close_btn}>Закрыть</button>
         </div>
         <CreateTaskForm/>
       </div>
@@ -26,7 +24,7 @@ export const CreateTask: React.FC<CreateTaskProps> = ({open}) => {
 
 
 const CreateTaskForm: React.FC = () => {
-  const formik = useFormik<CreateTaskFormProps>({
+  const formik = useFormik<Omit<TaskData, 'id'>>({
     initialValues: {
       title: '',
       shortDesc: '',
@@ -38,20 +36,13 @@ const CreateTaskForm: React.FC = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log('Formik данные для сохранения:');
-      try {
-
-        const jsonData = JSON.stringify(values);
-
-        localStorage.setItem('taskData', jsonData);
-        
-        console.log('Данные успешно сохранены в localStorage:', values);
-        alert('Задача сохранена в локальное хранилище браузера.');
-        formik.resetForm(); 
-      } catch (error) {
-        console.error('Ошибка при сохранении в localStorage:', error);
-        alert('Не удалось сохранить данные (возможно, переполнено хранилище)');
-      }
+      const newId = Date.now().toString();
+      const newTask: TaskData = {...values, id: newId}; 
+      
+      const existinTasks = getAllSavedTask();
+      const updatedTask = [...existinTasks, newTask];
+      saveAllTasks(updatedTask);
+      formik.resetForm();
     }
   })
   return (
