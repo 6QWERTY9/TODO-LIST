@@ -1,0 +1,41 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Замените main, если ваша основная ветка называется по-другому
+    # Указываем, что этот экшен запускается только при изменениях в папке frontend
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Или ваша версия Node.js
+
+      - name: Install dependencies in frontend
+        run: npm install
+        working-directory: frontend # Указываем папку frontend
+
+      - name: Build project
+        run: npm run build
+        working-directory: frontend # Указываем папку frontend
+
+      # Этот шаг загружает артефакт (собранный проект)
+      - name: Upload production artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # dist - это стандартная папка сборки для большинства фреймворков (Create React App, Vite)
+          path: frontend/dist 
+
+      # Этот шаг разворачивает артефакт на GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
