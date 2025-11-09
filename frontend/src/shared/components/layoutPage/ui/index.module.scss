@@ -6,9 +6,12 @@
 
     .middle_content {
         display: flex;
-
+        
+        column-gap: 100px;
         main {
             margin-top: 3%;
+            
+            
         }
     }
 }

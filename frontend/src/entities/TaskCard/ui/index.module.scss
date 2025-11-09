@@ -5,7 +5,7 @@
     width: 365px;
     height: 134px;
 
-    justify-self: center;
+    
     
     display: flex;
     align-items: center;
@@ -13,6 +13,7 @@
     
     border-radius: 10px;
     border: 1px solid $gray;
+    
 
     cursor: pointer;
 
@@ -33,7 +34,7 @@
         
         column-gap: 5px;
 
-        .status_circle {
+        .priority_circle {
             width: 12px;
             height: 12px;
             border-radius: 100%;
@@ -43,16 +44,16 @@
             align-self: center;
             justify-self: center;
 
-            &.done {
-                border: 2px solid $green;
-            }
-
-            &.in_progress {
-                border: 2px solid $blue;
-            }
-
-            &.not_started {
+            &.extreme {
                 border: 2px solid $red;
+            }
+
+            &.moderate {
+                border: 2px solid $lightBlue;
+            }
+
+            &.low {
+                border: 2px solid $green;
             }
         }
 
@@ -110,11 +111,11 @@
 .done {
     color: $green;
 }
-
 .in_progress {
-    color: $blue;
+    color: $lightBlue;
 }
-
 .not_started {
     color: $red;
 }
+
+

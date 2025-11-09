@@ -68,7 +68,37 @@ export const TaskPage = () => {
         setTasks(updatedFormmattedData);
 
         setSelectedTask(prevTask => (prevTask?.id === id ? null : prevTask));
-    }, [])
+    }, []);
+    const handleStatusChange = useCallback((id: string, newStatus: TaskCardProps['status']) => {
+        // 1. Обновляем localStorage
+        const rawData = getAllSavedTask();
+        const updatedRawData = rawData.map(task => {
+            if (task.id === id) {
+                // Внимание: TaskData (сырые данные) и TaskCardProps (UI пропсы) 
+                // имеют разные форматы. Вам нужно определить, как статус хранится в сырых данных.
+                // Сейчас мы используем формат UI пропсов ('Выполнено', 'В процессе'...)
+                // Если в сырых данных другой формат, его нужно конвертировать здесь.
+                return { ...task, status: newStatus }; // <-- ПРИМЕР: предполагаем, что у TaskData есть поле status
+            }
+            return task;
+        });
+        saveAllTasks(updatedRawData);
+
+        // 2. Обновляем состояние UI (массив tasks)
+        const updatedFormattedData = updatedRawData.map(mapTaskDataToCardProps);
+        setTasks(updatedFormattedData);
+
+        // 3. Обновляем состояние выбранной задачи, если она открыта
+        setSelectedTask(prevTask => {
+            if (prevTask?.id === id) {
+                // Возвращаем обновленную версию выбранной задачи
+                return { ...prevTask, status: newStatus }; // <-- ПРИМЕР: предполагаем, что у TaskData есть поле status
+            }
+            return prevTask;
+        });
+
+    }, []);
+    
     return (
         <LayoutPage>
             <div className={css.content_wrapper}>
@@ -82,7 +112,7 @@ export const TaskPage = () => {
                 />
 
                 {selectedTask && (
-                    <ViewFullTask task={selectedTask} onDeleteTask={handleDeletTask}/>
+                    <ViewFullTask task={selectedTask} onDeleteTask={handleDeletTask} onChangeStatus={handleStatusChange}/>
                 )}
             </div>
         </LayoutPage>

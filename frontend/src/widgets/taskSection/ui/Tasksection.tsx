@@ -5,6 +5,7 @@ import { CreateTask, type TaskData } from "@features/createTask";
 
 import css from './index.module.scss';
 import { ReactSVG } from "react-svg";
+import clsx from "clsx";
 
 interface TaskSectionProps {
   tasks: TaskCardProps[];
@@ -25,7 +26,7 @@ export const TaskSection: React.FC<TaskSectionProps> = ({tasks, onClose,onOpen, 
           <button onClick={onOpen} className={css.add_button}><ReactSVG src="./icons/add.svg"/></button>
         </div>
 
-        <div className={css.tasks_list}>
+        <div className={clsx(css.tasks_list, {[css.few_task]: tasks.length <= 4})}>
           {tasks.length > 0 ? (
             tasks.map(task => (
               <TaskCard key={task.id} {...task} onClick={onTaskSelect}/>

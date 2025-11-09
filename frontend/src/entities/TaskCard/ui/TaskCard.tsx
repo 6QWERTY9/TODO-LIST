@@ -14,14 +14,14 @@ export const TaskCard: React.FC<TaskCardProps> = ({ title, shortDesc, status, pr
     const handleCard = () => {
       setCardFocus(!isCardFocus)
       if (onClick) { // <-- Проверка наличия пропса
-        onClick(id);
+        onClick(id!);
       }
     }
     return (
       <div className={clsx(css.task_card_wrapper, {[css.focus]: isCardFocus})} onClick={handleCard} id={id} role='button'>
         <div className={css.task_card_content}>
           
-          <div className={clsx(css.status_circle, css[statusClassName[status]])}></div>
+          <div className={clsx(css.priority_circle, css[priorityClassName[priority]])}></div>
 
           <div className={css.task_card_text_content}>
             <h4 className={css.task_card_title}>{title}</h4>
