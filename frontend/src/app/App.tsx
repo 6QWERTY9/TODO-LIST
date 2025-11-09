@@ -1,13 +1,14 @@
-import { Header } from "@shared/components/header"
-import { LayoutPage } from "@shared/components/layoutPage/ui/Layoutpage"
-import { TaskSection } from "@widgets/taskSection"
+
+import { TaskPage } from "@pages/taskPage/TaskPage"
+
+
 
 import { BrowserRouter } from "react-router-dom"
 function App() {
 
   return (
     <BrowserRouter>
-    <LayoutPage>asdasd</LayoutPage>
+    <TaskPage/>
     </BrowserRouter>
   )
 }

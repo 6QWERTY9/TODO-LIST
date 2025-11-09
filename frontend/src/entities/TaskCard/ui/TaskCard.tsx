@@ -14,7 +14,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ title, shortDesc, status, pr
     const handleCard = () => {
       setCardFocus(!isCardFocus)
       if (onClick) { // <-- Проверка наличия пропса
-        onClick();
+        onClick(id);
       }
     }
     return (

@@ -1,46 +1,41 @@
-import { useEffect, useState } from "react";
+
 import { TaskCard, type TaskCardProps } from "@entities/TaskCard";
-import { getAllSavedTask } from "@shared/util/localStorageUtils";
-import { mapTaskDataToCardProps } from "@shared/util";
-import { CreateTask } from "@features/createTask";
 
-export const TaskSection = () => {
-  const [tasks, setTasks] = useState<TaskCardProps[]>([]);
-  const [showAddTask, setShowAddTask] = useState(false);
+import { CreateTask, type TaskData } from "@features/createTask";
 
-  const handleOpen = () => {
-    setShowAddTask(true);
-  }
-  const handleClose = () => {
-    setShowAddTask(false);
-  }
-  
-  useEffect(() => {
-    const rawDataArray = getAllSavedTask();
+import css from './index.module.scss';
+import { ReactSVG } from "react-svg";
 
-    const formattedTasks = rawDataArray.map(mapTaskDataToCardProps);
+interface TaskSectionProps {
+  tasks: TaskCardProps[];
+  onOpen: () => void;
+  onClose: () => void;
+  onTaskSelect: (id: string) => void;
+  onSubmitSuccess: (taskData: TaskData) => void;
+  open: boolean;
+}
 
-    setTasks(formattedTasks);
-  }, []);
+export const TaskSection: React.FC<TaskSectionProps> = ({tasks, onClose,onOpen, onSubmitSuccess, open, onTaskSelect}) => {
 
-  
   return (
-    <section>
-      <div>
-        <span>Задачи</span>
-        <button onClick={handleOpen}>Добавить задачу</button>
-      </div>
+    <section className={css.tasks_wrapper}>
+      <div className={css.content}>
+        <div className={css.tasks_top_content}>
+          <span className={css.task_title}>Задачи</span>
+          <button onClick={onOpen} className={css.add_button}><ReactSVG src="./icons/add.svg"/></button>
+        </div>
 
-      <div>
-        {tasks.length > 0 ? (
-          tasks.map(task => (
-            <TaskCard key={task.id} {...task}/>
-          ))
-        ) : (
-          <p>Нет текущих задач для отображения.</p>
-        )}
+        <div className={css.tasks_list}>
+          {tasks.length > 0 ? (
+            tasks.map(task => (
+              <TaskCard key={task.id} {...task} onClick={onTaskSelect}/>
+            ))
+          ) : (
+            <p>Нет текущих задач для отображения.</p>
+          )}
+        </div>
       </div>
-      <CreateTask open={showAddTask} onClose={handleClose}/>
+      <CreateTask open={open} onClose={onClose} onSubmitSuccess={onSubmitSuccess}/>
     </section>
   )
 }

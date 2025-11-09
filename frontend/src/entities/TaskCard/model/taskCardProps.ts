@@ -4,6 +4,8 @@ export interface TaskCardProps {
     priority: 'Срочный' | 'Умеренный' | 'Низкий';
     status: 'Выполнено' | 'В процессе' | 'Не начато';
     createDate: string;
-    id?: string;
-    onClick?: () => void;
+    id: string;
+    onClick?: (id: string) => void;
+    description: string;
+    
 }

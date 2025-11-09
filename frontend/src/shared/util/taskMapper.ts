@@ -1,4 +1,4 @@
-import type { TaskData } from "./getSavedTaskData";
+import type { TaskData } from "@features/createTask";
 import type { TaskCardProps } from "@entities/TaskCard/model/taskCardProps";
 
 export function mapTaskDataToCardProps(rawData: TaskData): TaskCardProps {
@@ -15,6 +15,8 @@ export function mapTaskDataToCardProps(rawData: TaskData): TaskCardProps {
         shortDesc: rawData.shortDesc,
         priority: priority,
         status: 'Не начато',
-        createDate: new Date().toLocaleDateString()
+        createDate: rawData.date,
+        description: rawData.description,
+        id: rawData.id
     }
 }

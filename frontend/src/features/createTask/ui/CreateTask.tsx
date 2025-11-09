@@ -4,10 +4,9 @@ import type { CreateTaskProps, TaskData } from "../model"
 
 import css from './index.module.scss';
 
-import { getAllSavedTask, saveAllTasks } from "@shared/util/localStorageUtils";
 
 
-export const CreateTask: React.FC<CreateTaskProps> = ({open, onClose}) => {
+export const CreateTask: React.FC<CreateTaskProps> = ({open, onClose, onSubmitSuccess}) => {
   
   return (
     <dialog open={open} aria-modal={true} className={css.create_task_wrapper}>
@@ -16,14 +15,17 @@ export const CreateTask: React.FC<CreateTaskProps> = ({open, onClose}) => {
           <span className={css.create_task_title}>Создать новую задачу</span>
           <button onClick={onClose} className={css.create_task_close_btn}>Закрыть</button>
         </div>
-        <CreateTaskForm/>
+        <CreateTaskForm onSubmitSuccess={onSubmitSuccess}/>
       </div>
     </dialog>
   )
 }
 
+interface formProps {
+  onSubmitSuccess: (taskData: TaskData) => void;
+}
 
-const CreateTaskForm: React.FC = () => {
+const CreateTaskForm: React.FC<formProps> = ({onSubmitSuccess}) => {
   const formik = useFormik<Omit<TaskData, 'id'>>({
     initialValues: {
       title: '',
@@ -39,9 +41,7 @@ const CreateTaskForm: React.FC = () => {
       const newId = Date.now().toString();
       const newTask: TaskData = {...values, id: newId}; 
       
-      const existinTasks = getAllSavedTask();
-      const updatedTask = [...existinTasks, newTask];
-      saveAllTasks(updatedTask);
+      onSubmitSuccess(newTask);
       formik.resetForm();
     }
   })
